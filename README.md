@@ -21,7 +21,7 @@
 - **Windows OS**  
 - **.NET Framework 4.8** or higher  
 - Visual Studio 2019/2022 (or any C# IDE)  
-- MetroFramework NuGet package
+- [MetroFramework NuGet package](https://www.nuget.org/packages/MetroFramework)  
 
 ---
 
@@ -29,3 +29,10 @@
 
 For full installation and setup instructions, please visit the **[ByteCrypt Wiki](https://github.com/d3letereal/ByteCrypt/wiki)**.  
 It includes detailed steps for downloading, extracting, and running the application.
+
+---
+
+## Learn More About MetroFramework
+
+To learn more about the MetroFramework UI used in ByteCrypt, visit the official documentation:  
+👉 [MetroFramework Documentation](https://thielj.github.io/MetroFramework/)
