@@ -1,73 +1,142 @@
 ﻿using System;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
-using MaterialSkin;
-using MaterialSkin.Controls;
+using MetroFramework;
+using MetroFramework.Forms;
 
 namespace ByteCrypt
 {
-    public partial class Form1 : MaterialForm
+    public partial class Form1 : MetroForm
     {
-        private MaterialFlatButton btnEncrypt;
-        private MaterialFlatButton btnDecrypt;
+        private MetroFramework.Controls.MetroButton btnEncrypt;
+        private MetroFramework.Controls.MetroButton btnDecrypt;
+        private Label lblTitle;
+        private Label lblSubTitle;
+        private Label lblKey;
+        private MetroFramework.Controls.MetroTextBox txtKey;
         private OpenFileDialog openFileDialog;
-        private const string password = "YourStrongPassword123!";
 
         public Form1()
         {
             InitializeComponent();
-            InitializeMaterialUI();
+            InitializeUI();
         }
 
-        private void InitializeMaterialUI()
+        private void InitializeUI()
         {
-            // MaterialSkin manager
-            var materialSkinManager = MaterialSkinManager.Instance;
-            materialSkinManager.AddFormToManage(this);
-            materialSkinManager.Theme = MaterialSkinManager.Themes.DARK;
-
-            // Set custom dark gray theme (32,32,32)
-            materialSkinManager.ColorScheme = new ColorScheme(
-                Color.FromArgb(32, 32, 32), // Primary
-                Color.FromArgb(32, 32, 32), // Dark Primary
-                Color.FromArgb(32, 32, 32), // Light Primary
-                Color.FromArgb(100, 100, 100), // Accent
-                TextShade.WHITE
-            );
-
+            // Form settings
             this.Text = "ByteCrypt";
-            this.Size = new Size(500, 300);
-
-            // Make window not resizable
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            this.Size = new Size(520, 400);
+            this.StartPosition = FormStartPosition.CenterScreen;
             this.MaximizeBox = false;
             this.MinimizeBox = true;
+            this.Style = MetroColorStyle.Blue;
+            this.Theme = MetroThemeStyle.Dark;
+            this.BackColor = Color.FromArgb(30, 30, 30); // Dark background
 
-            btnEncrypt = new MaterialFlatButton();
-            btnEncrypt.Text = "Encrypt Files";
-            btnEncrypt.Location = new Point(50, 100);
-            btnEncrypt.Size = new Size(150, 50);
+            // Title label
+            lblTitle = new Label
+            {
+                Text = "ByteCrypt",
+                Location = new Point(0, 20),
+                Size = new Size(this.ClientSize.Width, 40),
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = new Font("Segoe UI", 18, FontStyle.Bold),
+                ForeColor = Color.White,
+              //  BackColor = Color.FromArgb(30, 30, 30)
+            };
+            this.Controls.Add(lblTitle);
+
+            // Subtitle label
+            lblSubTitle = new Label
+            {
+                Text = "Encrypt or decrypt your files securely",
+                Location = new Point(0, 65),
+                Size = new Size(this.ClientSize.Width, 25),
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = new Font("Segoe UI", 10, FontStyle.Regular),
+                ForeColor = Color.LightGray,
+               // BackColor = Color.FromArgb(30, 30, 30)
+            };
+            this.Controls.Add(lblSubTitle);
+
+            // Key label
+            lblKey = new Label
+            {
+                Text = "Encryption Key:",
+                Location = new Point(40, 110),
+                Size = new Size(440, 25),
+                Font = new Font("Segoe UI", 10, FontStyle.Regular),
+                ForeColor = Color.White,
+               // BackColor = Color.FromArgb(30, 30, 30)
+            };
+            this.Controls.Add(lblKey);
+
+            // Key textbox
+            txtKey = new MetroFramework.Controls.MetroTextBox
+            {
+                Location = new Point(40, 140),
+                Size = new Size(440, 30),
+                WaterMark = "Default: BYTEISSUPERCUTE!",
+                ShowClearButton = true,
+                AutoCompleteMode = AutoCompleteMode.None,
+                AutoCompleteSource = AutoCompleteSource.None,
+                UseCustomBackColor = true,
+                BackColor = Color.FromArgb(45, 45, 45),
+                UseCustomForeColor = true,
+                ForeColor = Color.White,
+                WaterMarkColor = Color.Gray,
+                WaterMarkFont = new Font("Segoe UI", 9F, FontStyle.Italic)
+            };
+            txtKey.CustomButton.Visible = false;
+            this.Controls.Add(txtKey);
+
+            // Encrypt button
+            btnEncrypt = new MetroFramework.Controls.MetroButton
+            {
+                Text = "Encrypt Files",
+                Location = new Point(60, 200),
+                Size = new Size(180, 50),
+                UseSelectable = true,
+                BackColor = Color.FromArgb(30, 30, 30)
+            };
             btnEncrypt.Click += BtnEncrypt_Click;
             this.Controls.Add(btnEncrypt);
 
-            btnDecrypt = new MaterialFlatButton();
-            btnDecrypt.Text = "Decrypt Files";
-            btnDecrypt.Location = new Point(250, 100);
-            btnDecrypt.Size = new Size(150, 50);
+            // Decrypt button
+            btnDecrypt = new MetroFramework.Controls.MetroButton
+            {
+                Text = "Decrypt Files",
+                Location = new Point(280, 200),
+                Size = new Size(180, 50),
+                UseSelectable = true,
+                BackColor = Color.FromArgb(30, 30, 30)
+            };
             btnDecrypt.Click += BtnDecrypt_Click;
             this.Controls.Add(btnDecrypt);
 
-            openFileDialog = new OpenFileDialog();
-            openFileDialog.Multiselect = true; // allow selecting multiple files
+            // File dialog
+            openFileDialog = new OpenFileDialog
+            {
+                Multiselect = true,
+                Title = "Select files to encrypt/decrypt"
+            };
+        }
+
+        private string GetKey()
+        {
+            string key = txtKey.Text;
+            return string.IsNullOrEmpty(key) ? "BYTEISSUPERCUTE!" : key;
         }
 
         private void BtnEncrypt_Click(object sender, EventArgs e)
         {
             if (openFileDialog.ShowDialog() != DialogResult.OK) return;
+
+            string password = GetKey();
 
             foreach (string filePath in openFileDialog.FileNames)
             {
@@ -75,75 +144,50 @@ namespace ByteCrypt
 
                 try
                 {
-                    byte[] fileBytes;
-
-                    if (ext == ".png")
-                    {
-                        using (Bitmap bmp = new Bitmap(filePath))
-                        {
-                            Bitmap scrambledBmp = ScrambleBitmap(bmp, password);
-                            fileBytes = BitmapToBytes(scrambledBmp);
-                        }
-                    }
-                    else
-                    {
-                        fileBytes = File.ReadAllBytes(filePath);
-                    }
-
-                    byte[] encrypted = EncryptFileWithHeader(fileBytes, ext);
+                    byte[] fileBytes = File.ReadAllBytes(filePath);
+                    byte[] encrypted = EncryptFileWithHeader(fileBytes, ext, password);
                     File.WriteAllBytes(Path.ChangeExtension(filePath, ".byte"), encrypted);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error encrypting {filePath}: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MetroMessageBox.Show(this, $"Error encrypting {filePath}: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 
-            MessageBox.Show("Selected files encrypted as .byte!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MetroMessageBox.Show(this, "Selected files encrypted as .byte!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void BtnDecrypt_Click(object sender, EventArgs e)
         {
-            openFileDialog.Filter = ".byte files|*.byte|All files|*.*";
             if (openFileDialog.ShowDialog() != DialogResult.OK) return;
+
+            string password = GetKey();
 
             foreach (string filePath in openFileDialog.FileNames)
             {
                 try
                 {
                     byte[] encrypted = File.ReadAllBytes(filePath);
-                    byte[] decrypted = DecryptFileWithHeader(encrypted, out string originalExt);
-
-                    if (originalExt == ".png")
-                    {
-                        using (Bitmap bmp = BytesToBitmap(decrypted))
-                        {
-                            Bitmap restored = UnscrambleBitmap(bmp, password);
-                            File.WriteAllBytes(Path.ChangeExtension(filePath, "_restored.png"), BitmapToBytes(restored));
-                        }
-                    }
-                    else
-                    {
-                        File.WriteAllBytes(Path.ChangeExtension(filePath, "_restored" + originalExt), decrypted);
-                    }
+                    byte[] decrypted = DecryptFileWithHeader(encrypted, out string originalExt, password);
+                    File.WriteAllBytes(Path.ChangeExtension(filePath, "_restored" + originalExt), decrypted);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error decrypting {filePath}: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MetroMessageBox.Show(this, $"Error decrypting {filePath}: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 
-            MessageBox.Show("Selected files decrypted!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MetroMessageBox.Show(this, "Selected files decrypted!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        // AES encryption/decryption
-        private byte[] EncryptBytes(byte[] bytes)
+        private byte[] EncryptBytes(byte[] bytes, string password)
         {
             using (Aes aes = Aes.Create())
             {
                 var key = new Rfc2898DeriveBytes(password, new byte[8] { 1, 2, 3, 4, 5, 6, 7, 8 });
                 aes.Key = key.GetBytes(32);
                 aes.IV = key.GetBytes(16);
+
                 using (MemoryStream ms = new MemoryStream())
                 using (CryptoStream cs = new CryptoStream(ms, aes.CreateEncryptor(), CryptoStreamMode.Write))
                 {
@@ -154,13 +198,14 @@ namespace ByteCrypt
             }
         }
 
-        private byte[] DecryptBytes(byte[] bytes)
+        private byte[] DecryptBytes(byte[] bytes, string password)
         {
             using (Aes aes = Aes.Create())
             {
                 var key = new Rfc2898DeriveBytes(password, new byte[8] { 1, 2, 3, 4, 5, 6, 7, 8 });
                 aes.Key = key.GetBytes(32);
                 aes.IV = key.GetBytes(16);
+
                 using (MemoryStream ms = new MemoryStream())
                 using (CryptoStream cs = new CryptoStream(ms, aes.CreateDecryptor(), CryptoStreamMode.Write))
                 {
@@ -171,8 +216,7 @@ namespace ByteCrypt
             }
         }
 
-        // Header methods
-        private byte[] EncryptFileWithHeader(byte[] data, string ext)
+        private byte[] EncryptFileWithHeader(byte[] data, string ext, string password)
         {
             byte[] header = new byte[10];
             byte[] extBytes = Encoding.ASCII.GetBytes(ext);
@@ -182,12 +226,12 @@ namespace ByteCrypt
             Array.Copy(header, combined, header.Length);
             Array.Copy(data, 0, combined, header.Length, data.Length);
 
-            return EncryptBytes(combined);
+            return EncryptBytes(combined, password);
         }
 
-        private byte[] DecryptFileWithHeader(byte[] encrypted, out string ext)
+        private byte[] DecryptFileWithHeader(byte[] encrypted, out string ext, string password)
         {
-            byte[] decrypted = DecryptBytes(encrypted);
+            byte[] decrypted = DecryptBytes(encrypted, password);
             byte[] header = new byte[10];
             Array.Copy(decrypted, header, 10);
             ext = Encoding.ASCII.GetString(header).Trim('\0');
@@ -195,58 +239,6 @@ namespace ByteCrypt
             byte[] fileData = new byte[decrypted.Length - 10];
             Array.Copy(decrypted, 10, fileData, 0, fileData.Length);
             return fileData;
-        }
-
-        // Bitmap helpers
-        private Bitmap ScrambleBitmap(Bitmap bmp, string password)
-        {
-            Random rnd = new Random(password.GetHashCode());
-            Bitmap newBmp = new Bitmap(bmp.Width, bmp.Height);
-            for (int y = 0; y < bmp.Height; y++)
-                for (int x = 0; x < bmp.Width; x++)
-                {
-                    Color c = bmp.GetPixel(x, y);
-                    Color newC = Color.FromArgb(c.A,
-                        (c.R + rnd.Next(256)) % 256,
-                        (c.G + rnd.Next(256)) % 256,
-                        (c.B + rnd.Next(256)) % 256);
-                    newBmp.SetPixel(x, y, newC);
-                }
-            return newBmp;
-        }
-
-        private Bitmap UnscrambleBitmap(Bitmap bmp, string password)
-        {
-            Random rnd = new Random(password.GetHashCode());
-            Bitmap newBmp = new Bitmap(bmp.Width, bmp.Height);
-            for (int y = 0; y < bmp.Height; y++)
-                for (int x = 0; x < bmp.Width; x++)
-                {
-                    Color c = bmp.GetPixel(x, y);
-                    Color orig = Color.FromArgb(c.A,
-                        (c.R - rnd.Next(256) + 256) % 256,
-                        (c.G - rnd.Next(256) + 256) % 256,
-                        (c.B - rnd.Next(256) + 256) % 256);
-                    newBmp.SetPixel(x, y, orig);
-                }
-            return newBmp;
-        }
-
-        private byte[] BitmapToBytes(Bitmap bmp)
-        {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                bmp.Save(ms, ImageFormat.Png);
-                return ms.ToArray();
-            }
-        }
-
-        private Bitmap BytesToBitmap(byte[] bytes)
-        {
-            using (MemoryStream ms = new MemoryStream(bytes))
-            {
-                return new Bitmap(ms);
-            }
         }
     }
 }
