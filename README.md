@@ -27,7 +27,5 @@
 
 ## Installation & Setup
 
-1. **Clone the repository**:
-
-```bash
-git clone https://github.com/yourusername/ByteCrypt.git
+For full installation and setup instructions, please visit the **[ByteCrypt Wiki](https://github.com/d3letereal/ByteCrypt/wiki)**.  
+It includes detailed steps for downloading, extracting, and running the application.
