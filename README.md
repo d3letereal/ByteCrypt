@@ -10,7 +10,7 @@
 
 - Encrypt files with a `.byte` extension.  
 - Decrypt `.byte` files back to their original format.  
-- Simple **Material Design UI** (basic layout, early stage).  
+- Simple **Metro Design UI** (basic layout, early stage).  
 - Fully Windows-compatible.  
 - Password-protected AES encryption (default password: `BYTEISSUPERCUTE!`).  
 
