@@ -1,8 +1,8 @@
 # ByteCrypt
 
-**ByteCrypt** is a simple file encryption and decryption tool built with **C#** and **MaterialSkin**. It is designed for **Windows** and provides a clean, dark-themed user interface to secure your files with AES encryption.
+**ByteCrypt** is a simple file encryption and decryption tool built with **C#** and **MaterialSkin**. It is designed for **Windows** and provides a dark-themed user interface to secure your files with AES encryption.
 
-> ⚠️ **Note:** This project is in its **early stage**. Use it carefully and do **not encrypt critical files** until fully tested.
+> ⚠️ **Note:** This project is in its **early stage**. The app works fine and files won’t be corrupted, but the user interface is still basic and rough.
 
 ---
 
@@ -10,7 +10,7 @@
 
 - Encrypt files with a `.byte` extension.  
 - Decrypt `.byte` files back to their original format.  
-- Simple and modern **Material Design UI**.  
+- Simple **Material Design UI** (basic layout, early stage).  
 - Fully Windows-compatible.  
 - Password-protected AES encryption (default password: `BYTEISSUPERCUTE!`).  
 
