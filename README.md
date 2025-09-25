@@ -20,8 +20,9 @@
 
 - **Windows OS**  
 - **.NET Framework 4.8** or higher  
-- Visual Studio 2019/2022 (or any C# IDE)
-  ### Optinal
+- Visual Studio 2019/2022 (or any C# IDE)  
+
+> **Optional:** MetroFramework can be installed for development purposes to modify or improve the UI.  
 - [MetroFramework NuGet package](https://www.nuget.org/packages/MetroFramework)  
 
 ---
