@@ -20,7 +20,8 @@
 
 - **Windows OS**  
 - **.NET Framework 4.8** or higher  
-- Visual Studio 2019/2022 (or any C# IDE)  
+- Visual Studio 2019/2022 (or any C# IDE)
+  ### Optinal
 - [MetroFramework NuGet package](https://www.nuget.org/packages/MetroFramework)  
 
 ---
