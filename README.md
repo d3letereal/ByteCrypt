@@ -1,5 +1,3 @@
-![ByteCrypt Screenshot](https://raw.githubusercontent.com/d3letereal/image/refs/heads/main/Screenshot%202025-09-27%20125733.png)
-
 # 🔐 ByteCrypt
 
 **ByteCrypt** is a simple file encryption and decryption tool built with **C#** and **MetroFramework**.  
@@ -16,6 +14,10 @@ It is designed for **Windows** and provides a dark-themed user interface to secu
 - 🖥️ Simple **Metro Design UI** (basic layout, early stage).  
 - 🪟 Fully Windows-compatible.  
 - 🔑 Password-protected AES encryption (default password: `BYTEISSUPERCUTE!`).  
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/d3letereal/image/refs/heads/main/Screenshot%202025-09-27%20125733.png" alt="ByteCrypt Screenshot" width="600"/>
+</p>
 
 ---
 
