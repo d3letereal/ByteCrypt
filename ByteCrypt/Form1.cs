@@ -140,7 +140,7 @@ namespace ByteCrypt
             return string.IsNullOrEmpty(key) ? "BYTEISSUPERCUTE!" : key;
         }
 
-        // ---------------- AES Methods ----------------
+        
         private byte[] EncryptBytes(byte[] bytes, string password)
         {
             using (Aes aes = Aes.Create())
@@ -202,7 +202,7 @@ namespace ByteCrypt
             return fileData;
         }
 
-        // ---------------- BYte Methods ----------------
+  
         private byte[] EncodeBYte(byte[] data)
         {
             byte[] encoded = new byte[data.Length];
@@ -250,7 +250,7 @@ namespace ByteCrypt
             return fileData;
         }
 
-        // ---------------- Button Events ----------------
+     
         private void BtnEncrypt_Click(object sender, EventArgs e)
         {
             if (openFileDialog.ShowDialog() != DialogResult.OK) return;
